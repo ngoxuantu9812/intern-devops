@@ -1,0 +1,26 @@
+version: "2.0"
+services:
+  frontend:
+    image: $REGISTRY_FRONTEND
+    expose:
+      - 80
+
+  admin-api:
+    image: $REGISTRY_ADMIN_API
+    working_dir: /var/www
+    expose:
+      - 9000
+      
+  mysql:
+    image: registry.gitlab.com/gkc_team/docker-mysql-gkc:latest
+
+  web-server:
+    build:
+      context: ./
+      dockerfile: web-server.dockerfile
+    working_dir: /var/www
+    volumes_from: 
+      - admin-api
+    depends_on: 
+      - admin-api
+      
